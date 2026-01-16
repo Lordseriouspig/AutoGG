@@ -15,12 +15,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import top.einsluca.autogg.AutoGGAddon;
 
 public class ServerRegistry {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerRegistry.class);
 
     private static final String DEFAULT_REMOTE_URL = "https://raw.githubusercontent.com/EinsLucaaa/AutoGG/refs/heads/master/core/src/main/resources/assets/auto-gg/servers.json";
 
@@ -28,19 +25,19 @@ public class ServerRegistry {
 
     private final List<ServerConfiguration> servers = new ArrayList<>();
 
-    public ServerRegistry() {
+    public ServerRegistry(AutoGGAddon addon) {
         String remoteUrl = DEFAULT_REMOTE_URL;
 
         Optional<List<ServerEntry>> remote = Optional.empty();
         try {
             remote = loadFromUrl(remoteUrl);
         } catch (Exception e) {
-            LOGGER.warn("[ServerRegistry] Failed to load remote servers.json from {}: {}", remoteUrl, e.getMessage(), e);
+            addon.logger().warn("[ServerRegistry] Failed to load remote servers.json from {}: {}", remoteUrl, e.getMessage(), e);
         }
 
         if (remote.isPresent()) {
             fillFromEntries(remote.get());
-            LOGGER.info("[ServerRegistry] Loaded server configurations from remote URL: {}", remoteUrl);
+            addon.logger().info("[ServerRegistry] Loaded server configurations from remote URL: {}", remoteUrl);
             return;
         }
 
@@ -48,16 +45,16 @@ public class ServerRegistry {
             Optional<List<ServerEntry>> bundled = loadFromResource();
             if (bundled.isPresent()) {
                 fillFromEntries(bundled.get());
-                LOGGER.info("[ServerRegistry] Loaded server configurations from bundled resource");
+                addon.logger().info("[ServerRegistry] Loaded server configurations from bundled resource");
                 return;
             } else {
-                LOGGER.warn("[ServerRegistry] Bundled servers.json not found or empty");
+                addon.logger().warn("[ServerRegistry] Bundled servers.json not found or empty");
             }
         } catch (Exception e) {
-            LOGGER.warn("[ServerRegistry] Failed to load bundled servers.json: {}", e.getMessage(), e);
+            addon.logger().warn("[ServerRegistry] Failed to load bundled servers.json: {}", e.getMessage(), e);
         }
 
-        LOGGER.info("[ServerRegistry] No server configurations available; registry is empty");
+        addon.logger().info("[ServerRegistry] No server configurations available; registry is empty");
     }
 
     private void fillFromEntries(List<ServerEntry> entries) {

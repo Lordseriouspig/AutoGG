@@ -12,7 +12,7 @@ import java.util.TimerTask;
 @AddonMain
 public class AutoGGAddon extends LabyAddon<AutoGGConfiguration> {
 
-    private final ServerRegistry serverRegistry = new ServerRegistry();
+    private final ServerRegistry serverRegistry = new ServerRegistry(this);
 
     private boolean alreadySent = false;
 
