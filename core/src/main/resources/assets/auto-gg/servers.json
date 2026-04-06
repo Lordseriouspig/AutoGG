@@ -42,7 +42,7 @@
     },
     {
       "hosts": ["hypixel.net", "mc.hypixel.net"],
-      "identifiers": ["Reward Summary", "1st Killer", "Damage Dealt", "Murderers"],
+      "identifiers": ["Reward Summary", "1st Killer", "Damage Dealt"],
       "separators": [":" ]
     },
     {
